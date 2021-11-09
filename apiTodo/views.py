@@ -44,7 +44,31 @@ def todoListUpdate(request, pk):
     serializer = TodoSerializer(instance=queryset, data = request.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+        return Response(serializer.data)
+
+@api_view(['DELETE'])
+def todoListDelete(request, pk):
+    queryset = Todo.objects.get(id=pk)
+    queryset.delete()
+    return Response('Item Deleted')
+
+@api_view(['DELETE', 'PUT', 'GET'])
+def todo_detail(request, pk):
+    queryset = Todo.objects.get(id=pk)
+    if request.method == 'GET':
+        serializer = TodoSerializer(queryset)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = TodoSerializer(instance=queryset, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+    elif request.method == 'DELETE':
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+
+    
         
 
 
