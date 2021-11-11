@@ -17,7 +17,7 @@ urlpatterns = [
     #class_base 
     path('classtodolist/', TodoList.as_view()),
     path('classtododetail/<int:pk>', ToDetail.as_view()),
-    path('classtodolistcreate/<int:pk>', TodoListCreate.as_view()),
+    path('classtodolistcreate/', TodoListCreate.as_view()),
     path('classtodoretrieve/<int:pk>', TodoRetrieveUpdateDelete.as_view()),
     path('TodoConcListCreate/', TodoConcListCreate.as_view()),
     path('TodoConcRetrieve/<int:pk>', TodoConcRetrieveUpdateDelete.as_view()),

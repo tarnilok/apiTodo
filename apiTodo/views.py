@@ -58,7 +58,7 @@ def todoListDelete(request, pk):
     queryset.delete()
     return Response('Item Deleted')
 
-@api_view(['DELETE', 'PUT', 'GET'])
+@api_view(['DELETE', 'PUT', 'GET', 'POST'])
 def todo_detail(request, pk):
     queryset = Todo.objects.get(id=pk)
     if request.method == 'GET':
@@ -72,16 +72,22 @@ def todo_detail(request, pk):
     elif request.method == 'DELETE':
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'POST':
+        serializer = TodoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 ############### API View ###############
 
 class TodoList(APIView):
-    def get(self, request):
+    def get(self, request):   # ismi get olmalı
         todos = Todo.objects.all()
         serializer = TodoSerializer(todos, many=True)
         return Response(serializer.data)
     
-    def post(self, request):
+    def post(self, request): # ismi post olmalı 
         serializer = TodoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -89,27 +95,35 @@ class TodoList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class ToDetail(APIView):
-    def get_object(self, pk):
+    def get_objectt(self, pk):
         return get_object_or_404(Todo, pk=pk)
     
     def get(self, request, pk):
-        todo = self.get_object(pk)
+        todo = self.get_objectt(pk)
         serializer = TodoSerializer(todo)
         return Response(serializer.data)
     
     def put(self, request, pk):
-        todo = self.get_object(pk)
+        todo = self.get_objectt(pk)
         serializer = TodoSerializer(todo, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             serializer._data["success"] = "Todo succesfully updated.." # underscore protected datayı değiştirmeyi sağlıyor.
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
-        todo = self.get_object(pk)
+        todo = self.get_objectt(pk)
         todo.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def post(self, request): # ismi post olmalı 
+        serializer = TodoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 ############### GenericAPI View ###############
 
