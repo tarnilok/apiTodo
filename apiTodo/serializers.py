@@ -4,8 +4,15 @@ from .models import Todo
 
 
 class TodoSerializer(serializers.ModelSerializer):
-    # todo_detail = serializers.HyperlinkedIdentityField(view_name='todo-detail')
+    todo_detail = serializers.HyperlinkedIdentityField(view_name='todo-detail')
 
     class Meta:
         model = Todo
-        fields = '__all__'
+        fields = (
+            'id',
+            'task',
+            'description',
+            'priority',
+            'is_done',
+            'todo_detail'
+        )

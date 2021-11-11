@@ -172,7 +172,7 @@ class TodoMVS(ModelViewSet):
     serializer_class = TodoSerializer
     
     @action(detail=False, methods=['get'])
-    def todo_count(self, request):
+    def todo_count(self, request): #fonksiyon adı ile değişken adı aynı olmalı
         todo_count = Todo.objects.filter(is_done=False).count()
         count = {
             'undo-todos' : todo_count
